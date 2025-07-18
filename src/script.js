@@ -1078,6 +1078,13 @@ function clearThinkingSquares() {
 
 // Animate piece movement
 function animatePieceMovement(move, callback) {
+    // Skip animation on mobile for better performance
+    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+    if (isMobile) {
+        if (callback) callback();
+        return;
+    }
+    
     const fromSquare = document.querySelector(`#board [data-square="${move.from}"]`);
     const toSquare = document.querySelector(`#board [data-square="${move.to}"]`);
     const piece = fromSquare ? fromSquare.querySelector('.unicode-piece') : null;
@@ -1110,6 +1117,15 @@ function animatePieceMovement(move, callback) {
     movingPiece.style.top = fromRect.top + 'px';
     movingPiece.style.width = fromRect.width + 'px';
     movingPiece.style.height = fromRect.height + 'px';
+    movingPiece.style.zIndex = '2000';
+    
+    // Copy computed styles to ensure piece looks right
+    const computedStyle = window.getComputedStyle(piece);
+    movingPiece.style.fontSize = computedStyle.fontSize;
+    movingPiece.style.display = 'flex';
+    movingPiece.style.alignItems = 'center';
+    movingPiece.style.justifyContent = 'center';
+    
     document.body.appendChild(movingPiece);
     
     // Hide original piece
