@@ -1795,3 +1795,30 @@ document.getElementById('gameOverOverlay').addEventListener('click', (e) => {
         hideGameOverPopup();
     }
 });
+
+// Prevent scrolling when interacting with chess pieces on mobile
+document.addEventListener('DOMContentLoaded', () => {
+    const boardElement = document.getElementById('board');
+    if (boardElement) {
+        // Prevent default touch behavior on the board
+        boardElement.addEventListener('touchstart', (e) => {
+            // Check if touching a piece or square
+            if (e.target.closest('.piece-417db') || e.target.closest('[data-square]')) {
+                e.preventDefault();
+            }
+        }, { passive: false });
+
+        boardElement.addEventListener('touchmove', (e) => {
+            // Prevent scrolling during drag
+            if (e.target.closest('.piece-417db') || e.target.closest('[data-square]')) {
+                e.preventDefault();
+            }
+        }, { passive: false });
+        
+        // Also prevent context menu on long press
+        boardElement.addEventListener('contextmenu', (e) => {
+            e.preventDefault();
+            return false;
+        });
+    }
+});

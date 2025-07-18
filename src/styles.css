@@ -542,6 +542,23 @@ body::before {
 @media (max-width: 768px) {
     body {
         padding: 10px;
+        /* Prevent scrolling when dragging pieces */
+        touch-action: none;
+    }
+    
+    /* Allow scrolling on specific elements */
+    .container {
+        touch-action: pan-y;
+    }
+    
+    /* Prevent scrolling on board during piece interaction */
+    #board {
+        touch-action: none;
+    }
+    
+    .move-history {
+        touch-action: pan-y;
+        -webkit-overflow-scrolling: touch;
     }
     
     .container {
