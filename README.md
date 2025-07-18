@@ -1,50 +1,96 @@
-# Chess with Stockfish
+# Garrison Chess 🏰
 
-A simple web-based chess game interface that uses Stockfish as the chess engine. You can play against the AI or have the AI play against itself.
+A unique chess variant where the weaker player receives a garrison reinforcement - an extra queen that can be deployed next to their king when losing by 5+ points.
+
+**Play it live:** https://uscgvet.github.io/GarrisonChess/
+
+## Game Rules
+
+1. **Standard chess rules apply** with one major addition
+2. **Garrison System**: When a player is down by 5+ points in material, they receive a garrison queen
+3. **Deployment**: The garrison piece can only be placed on empty squares adjacent to your king
+4. **One per game**: Each player can only receive one garrison reinforcement per game
+5. **Strategic timing**: The AI considers the best moment to deploy the garrison for maximum impact
 
 ## Features
 
-*   Play chess against the Stockfish engine.
-*   Toggle AI for the white player (Human vs AI, AI vs Human, AI vs AI).
-*   Unicode chess pieces.
-*   Move history.
-*   Undo moves.
-*   Adjust Stockfish engine settings (Threads, Depth).
+### Gameplay
+- 🤖 **Advanced AI** powered by Stockfish with garrison-aware strategy
+- 🎲 **Randomized starting positions** - every game is unique
+- 👑 **Garrison reinforcement system** with visual indicators
+- 🎯 **AI thinking visualization** - see what moves the AI is considering
+- ⚡ **Smooth animations** on desktop, instant moves on mobile
+- 📱 **Mobile optimized** with tap-to-move interface
 
-## Prerequisites
+### User Interface
+- 🎨 **Modern dark theme** with purple accents
+- 📊 **Material strength indicator** showing who's ahead
+- 📜 **Color-coded move history** (white/black indicators)
+- 🏆 **Game over popup** with statistics
+- 🔧 **Adjustable AI settings** (depth and threads)
 
-*   [Node.js](https://nodejs.org/) (which includes npm)
+### Mobile Features
+- 📱 **Tap-to-select, tap-to-move** interface (no dragging required)
+- 🎯 **Visual indicators** for selected pieces and valid moves
+- 📏 **Responsive design** with properly scaled pieces
+- 🚀 **Garrison piece appears directly under board** when available
 
-## How to Launch
+## Local Development
 
-1.  **Clone the repository (if applicable) or download the source code.**
-    ```bash
-    # If it's a git repository
-    git clone <repository-url>
-    cd chess-stockfish
-    ```
+```bash
+# Install dependencies
+npm install
 
-2.  **Install dependencies:**
-    Open a terminal in the project's root directory (`c:\HTML\Chess-Stockfish`) and run:
-    ```bash
-    npm install
-    ```
+# Start development server
+npm start
 
-3.  **Start the development server:**
-    After the dependencies are installed, run the following command in the terminal:
-    ```bash
-    npm start
-    ```
-    This will build the project and open it in your default web browser.
+# Build for production
+npm run build:prod
+```
 
-## How to Play
+## Deployment
 
-*   The game will open in your browser.
-*   By default, you play as White, and Black is controlled by the Stockfish AI.
-*   To make a move, drag and drop a piece to its new square.
-*   Use the "White is AI" toggle to let the AI control the white pieces.
-    *   If toggled on at the start of the game or when it's White's turn, the AI will make a move for White.
-    *   If toggled off when it's White's turn, you can make a move for White.
-*   Use the "New Game" button to reset the board.
-*   Use the "Undo" button to take back the last move.
-*   Adjust Stockfish's "Threads" and "Depth" settings and click "Apply Settings" to change the engine's thinking parameters.
+The game is automatically deployed to GitHub Pages via GitHub Actions when you push to the main branch.
+
+### Manual Deployment
+```bash
+# Build and deploy
+npm run deploy
+```
+
+### First-time Setup
+1. Push your code to GitHub
+2. Go to Settings → Pages
+3. Source: Select "GitHub Actions"
+4. The site will be available at `https://YOUR_USERNAME.github.io/REPO_NAME/`
+
+## Technical Stack
+
+- **Chess.js** - Chess game logic and move validation
+- **Chessboard.js** - Interactive chess board UI
+- **Stockfish.js** - World-class chess AI engine (runs in Web Worker)
+- **Webpack** - Module bundling and build optimization
+- **GitHub Actions** - Automated deployment to GitHub Pages
+
+## Browser Support
+
+- ✅ Chrome, Firefox, Safari, Edge (latest versions)
+- ✅ Mobile browsers (iOS Safari, Chrome Android)
+- ✅ Tablets and phones with responsive design
+
+## Contributing
+
+Feel free to open issues or submit pull requests! Some ideas for contributions:
+- Additional garrison piece types (knight, rook, bishop)
+- Different material thresholds for garrison activation
+- Tournament mode with multiple games
+- Player statistics tracking
+- Online multiplayer support
+
+## License
+
+MIT License - feel free to use this code for your own projects!
+
+---
+
+Created with ❤️ by USCGVet | Powered by Claude 🤖
