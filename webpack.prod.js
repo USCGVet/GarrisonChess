@@ -7,7 +7,9 @@ module.exports = {
   output: {
     filename: 'bundle.js',
     path: path.resolve(__dirname, 'dist'),
-    clean: true, // Clean the output directory before emit
+    clean: {
+      keep: /index\.html/, // Keep index.html when cleaning
+    },
   },
   module: {
     rules: [
@@ -27,6 +29,7 @@ module.exports = {
         { from: 'node_modules/stockfish.js/stockfish.js', to: 'stockfish.js' },
         { from: 'node_modules/stockfish.js/stockfish.wasm', to: 'stockfish.wasm' },
         { from: 'src/favicon.ico', to: 'favicon.ico' },
+        { from: 'src/index.html', to: 'index.html' },
       ],
     }),
   ],

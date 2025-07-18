@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Garrison Chess - Strategic Reinforcement Chess</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <!-- Bundle CSS is handled by Webpack -->
+</head>
+<body>
+    <div class="container">
+        <div class="game-header">
+            <h1 class="game-title">🏰 Garrison Chess 🏰</h1>
+            <p id="status">Game Status: Ongoing</p>
+        </div>
+        <div class="game-layout">
+            <div class="left-panel">
+                <div class="controls-section">
+                    <button id="startBtn">New Garrison Game</button>
+                    <button id="undoBtn">Undo Move</button>
+                    <div class="ai-toggle">
+                        <label for="whiteAiToggle">White is AI:</label>
+                        <input type="checkbox" id="whiteAiToggle">
+                    </div>
+                </div>
+                <div class="settings">
+                    <h3>Stockfish Settings</h3>
+                    <label for="threads">Threads:</label>
+                    <input type="number" id="threads" min="1" max="8" value="4">
+                    <label for="depth">Search Depth:</label>
+                    <input type="number" id="depth" min="1" max="20" value="15">
+                    <button id="applySettings">Apply Settings</button>
+                    <div id="cpuIndicator" class="cpu-indicator">
+                        <div class="cpu-label">AI Thinking</div>
+                        <div class="cpu-cores">
+                            <div class="cpu-core"></div>
+                            <div class="cpu-core"></div>
+                            <div class="cpu-core"></div>
+                            <div class="cpu-core"></div>
+                        </div>
+                        <div class="cpu-status">
+                            <span id="cpuDepth">Depth: 0</span>
+                            <span id="cpuNodes">Nodes: 0</span>
+                        </div>
+                        <div id="candidateMove" class="candidate-move"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="center-panel">
+                <div id="board"></div>
+                <div class="material-strength">
+                    <div class="strength-info">
+                        <div class="white-strength">
+                            <span class="strength-label">White:</span>
+                            <span id="whiteValue">0</span>
+                        </div>
+                        <div class="strength-advantage" id="advantage">+0</div>
+                        <div class="black-strength">
+                            <span class="strength-label">Black:</span>
+                            <span id="blackValue">0</span>
+                        </div>
+                    </div>
+                    <div class="strength-bar-container">
+                        <div class="strength-bar-track">
+                            <div class="strength-bar-fill" id="strengthBar"></div>
+                            <div class="strength-bar-center"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="right-panel">
+                <div class="move-history">
+                    <h3>Move History</h3>
+                    <ol id="history"></ol>
+                </div>
+                <div id="reinforcementContainer" class="reinforcement-container" style="display: none;">
+                    <div class="reinforcement-header">
+                        <span id="reinforcementText"></span>
+                    </div>
+                    <div class="reinforcement-piece-wrapper">
+                        <div id="reinforcementPiece" class="reinforcement-piece" draggable="true">
+                            <span class="unicode-piece"></span>
+                        </div>
+                    </div>
+                    <div class="reinforcement-instructions">
+                        <span class="desktop-instruction">Drag the piece to an empty square next to your king</span>
+                        <span class="mobile-instruction">Tap the piece, then tap a green square</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Game Over Popup -->
+    <div id="gameOverOverlay" class="game-over-overlay">
+        <div id="gameOverPopup" class="game-over-popup">
+            <div class="game-over-content">
+                <div class="game-over-crown">♔</div>
+                <h2 id="gameOverTitle" class="game-over-title">Garrison Complete</h2>
+                <div id="gameOverMessage" class="game-over-message"></div>
+                <div id="gameOverStats" class="game-over-stats">
+                    <div class="stat-item">
+                        <span class="stat-label">Moves:</span>
+                        <span id="totalMoves" class="stat-value">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Duration:</span>
+                        <span id="gameDuration" class="stat-value">0:00</span>
+                    </div>
+                </div>
+                <div class="game-over-buttons">
+                    <button id="newGameBtn" class="game-over-btn primary">New Garrison</button>
+                </div>
+                <div class="game-over-close">Click anywhere outside to review the final position</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bundle Script -->
+    <script src="bundle.js"></script>
+</body>
+</html>

@@ -16,10 +16,15 @@ jobs:
         node-version: '18'
         
     - name: Install dependencies
-      run: npm install
+      run: |
+        npm install
+        npm list
       
     - name: Build
-      run: npm run build:prod
+      run: |
+        ls -la
+        npm run build:prod
+        ls -la dist/
       
     - name: Deploy to GitHub Pages
       uses: JamesIves/github-pages-deploy-action@v4
