@@ -1834,10 +1834,55 @@ document.addEventListener('DOMContentLoaded', () => {
                     });
                     
                     if (move) {
-                        board.position(game.fen());
-                        renderUnicodePieces();
-                        clearSelection();
-                        onMoveEnd(selectedSquare, squareId);
+                        // Animate the piece movement
+                        animatePieceMovement(move, () => {
+                            highlightMove(move);
+                            board.position(game.fen());
+                            renderUnicodePieces();
+                            clearSelection();
+                            updateStatus();
+                            
+                            // Update custom history tracker with new move
+                            if (gameHistoryTracker.length > 0) {
+                                gameHistoryTracker.push(move);
+                            }
+                            
+                            updateHistory();
+                            
+                            // Check if reinforcement can now be applied or updated
+                            if (!hasAppliedReinforcement) {
+                                const { whiteValue, blackValue } = updateMaterialStrength();
+                                const weakerPlayer = getWeakerPlayer(whiteValue, blackValue);
+                                
+                                // Always check and update reinforcement for the weaker player
+                                if (weakerPlayer) {
+                                    if (pendingReinforcement && pendingReinforcement.player === weakerPlayer) {
+                                        updateReinforcementIfActive();
+                                    } else if (!pendingReinforcement) {
+                                        // Check if there are valid squares for reinforcement
+                                        const validSquares = getValidReinforcementSquares(weakerPlayer);
+                                        if (validSquares.length > 0) {
+                                            // Temporarily set the pending reinforcement to check material
+                                            pendingReinforcement = { player: weakerPlayer };
+                                            applyReinforcement();
+                                            // If applyReinforcement didn't set up a reinforcement, clear it
+                                            if (!pendingReinforcement.piece) {
+                                                pendingReinforcement = null;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            
+                            // If the game is not over, and the next player is AI, let them move.
+                            if (!game.isGameOver()) {
+                                if (game.turn() === 'b') { // Black is always AI
+                                    console.log("Human white moved via tap, triggering Black AI.");
+                                    // Check if Black should use reinforcement first
+                                    checkAndUseBlackReinforcement();
+                                }
+                            }
+                        });
                     }
                 } else {
                     // Clicked on another piece or invalid square
