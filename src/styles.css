@@ -512,6 +512,10 @@ body::before {
         cursor: pointer;
     }
     
+    .reinforcement-piece .unicode-piece {
+        font-size: 45px !important; /* Match mobile piece size */
+    }
+    
     .reinforcement-piece.selected {
         background: rgba(138, 43, 226, 0.3);
         border-color: #8a2be2;
@@ -559,6 +563,11 @@ body::before {
     .move-history {
         touch-action: pan-y;
         -webkit-overflow-scrolling: touch;
+    }
+    
+    /* Smaller pieces for mobile */
+    .unicode-piece {
+        font-size: 40px !important; /* Down from 50px */
     }
     
     .container {
@@ -665,6 +674,11 @@ body::before {
     #board {
         width: calc(100vw - 30px) !important;
         height: calc(100vw - 30px) !important;
+    }
+    
+    /* Even smaller pieces for very small screens */
+    .unicode-piece {
+        font-size: 35px !important;
     }
     
     .material-strength {
