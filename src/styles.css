@@ -546,23 +546,27 @@ body::before {
 @media (max-width: 768px) {
     body {
         padding: 10px;
-        /* Prevent scrolling when dragging pieces */
-        touch-action: none;
+        /* Allow normal scrolling by default */
+        touch-action: auto;
     }
     
-    /* Allow scrolling on specific elements */
-    .container {
-        touch-action: pan-y;
-    }
-    
-    /* Prevent scrolling on board during piece interaction */
+    /* Only prevent scrolling on the chess board itself */
     #board {
         touch-action: none;
     }
     
-    .move-history {
-        touch-action: pan-y;
-        -webkit-overflow-scrolling: touch;
+    /* Ensure scrolling works everywhere else */
+    .container {
+        touch-action: auto;
+    }
+    
+    .left-panel,
+    .right-panel,
+    .controls-section,
+    .settings,
+    .move-history,
+    .reinforcement-container {
+        touch-action: auto;
     }
     
     /* Smaller pieces for mobile */

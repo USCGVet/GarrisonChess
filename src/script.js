@@ -1800,22 +1800,30 @@ document.getElementById('gameOverOverlay').addEventListener('click', (e) => {
 document.addEventListener('DOMContentLoaded', () => {
     const boardElement = document.getElementById('board');
     if (boardElement) {
-        // Prevent default touch behavior on the board
+        let isDraggingPiece = false;
+        
+        // Track when we start dragging a piece
         boardElement.addEventListener('touchstart', (e) => {
-            // Check if touching a piece or square
-            if (e.target.closest('.piece-417db') || e.target.closest('[data-square]')) {
+            // Only if we're touching a piece directly
+            if (e.target.closest('.piece-417db')) {
+                isDraggingPiece = true;
                 e.preventDefault();
             }
         }, { passive: false });
 
+        // Prevent scrolling only while dragging
         boardElement.addEventListener('touchmove', (e) => {
-            // Prevent scrolling during drag
-            if (e.target.closest('.piece-417db') || e.target.closest('[data-square]')) {
+            if (isDraggingPiece) {
                 e.preventDefault();
             }
         }, { passive: false });
         
-        // Also prevent context menu on long press
+        // Reset flag when done
+        boardElement.addEventListener('touchend', (e) => {
+            isDraggingPiece = false;
+        }, { passive: false });
+        
+        // Also prevent context menu on long press on board only
         boardElement.addEventListener('contextmenu', (e) => {
             e.preventDefault();
             return false;
