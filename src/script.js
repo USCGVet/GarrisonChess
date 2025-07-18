@@ -1796,37 +1796,101 @@ document.getElementById('gameOverOverlay').addEventListener('click', (e) => {
     }
 });
 
-// Prevent scrolling when interacting with chess pieces on mobile
+// Mobile tap-to-move functionality
 document.addEventListener('DOMContentLoaded', () => {
-    const boardElement = document.getElementById('board');
-    if (boardElement) {
-        let isDraggingPiece = false;
+    const isMobile = window.matchMedia('(max-width: 768px)').matches || 'ontouchstart' in window;
+    
+    if (isMobile) {
+        let selectedSquare = null;
+        let possibleMoves = [];
         
-        // Track when we start dragging a piece
-        boardElement.addEventListener('touchstart', (e) => {
-            // Only if we're touching a piece directly
-            if (e.target.closest('.piece-417db')) {
-                isDraggingPiece = true;
-                e.preventDefault();
+        // Override chessboard draggable for mobile
+        setTimeout(() => {
+            if (board) {
+                board.draggable(false);
             }
-        }, { passive: false });
-
-        // Prevent scrolling only while dragging
-        boardElement.addEventListener('touchmove', (e) => {
-            if (isDraggingPiece) {
-                e.preventDefault();
+        }, 100);
+        
+        // Add click handlers to squares
+        document.addEventListener('click', (e) => {
+            const square = e.target.closest('[data-square]');
+            if (!square) {
+                // Clicked outside board - deselect
+                clearSelection();
+                return;
             }
-        }, { passive: false });
-        
-        // Reset flag when done
-        boardElement.addEventListener('touchend', (e) => {
-            isDraggingPiece = false;
-        }, { passive: false });
-        
-        // Also prevent context menu on long press on board only
-        boardElement.addEventListener('contextmenu', (e) => {
-            e.preventDefault();
-            return false;
+            
+            const squareId = square.getAttribute('data-square');
+            
+            // If we have a selected piece
+            if (selectedSquare) {
+                // Check if this is a valid move
+                if (possibleMoves.includes(squareId)) {
+                    // Make the move
+                    const move = game.move({
+                        from: selectedSquare,
+                        to: squareId,
+                        promotion: 'q' // Always promote to queen for simplicity
+                    });
+                    
+                    if (move) {
+                        board.position(game.fen());
+                        renderUnicodePieces();
+                        clearSelection();
+                        onMoveEnd(selectedSquare, squareId);
+                    }
+                } else {
+                    // Clicked on another piece or invalid square
+                    clearSelection();
+                    // Check if we clicked on our own piece
+                    selectPiece(squareId);
+                }
+            } else {
+                // No piece selected - try to select this square
+                selectPiece(squareId);
+            }
         });
+        
+        function selectPiece(square) {
+            const piece = game.get(square);
+            if (!piece) return;
+            
+            // Check if it's the player's turn and their piece
+            const isWhiteTurn = game.turn() === 'w';
+            const isWhitePiece = piece.color === 'w';
+            
+            // Only select if it's the human player's piece
+            if (isWhiteTurn && isWhitePiece && !isWhitePlayerAi) {
+                highlightSquare(square);
+                selectedSquare = square;
+                showPossibleMoves(square);
+            } else if (!isWhiteTurn && !isWhitePiece) {
+                // Black is always AI, so don't allow selection
+                return;
+            }
+        }
+        
+        function showPossibleMoves(square) {
+            // Get all legal moves for this piece
+            const moves = game.moves({ square: square, verbose: true });
+            possibleMoves = moves.map(m => m.to);
+            
+            // Highlight possible move squares
+            possibleMoves.forEach(sq => {
+                $(`#board [data-square="${sq}"]`).addClass('possible-move');
+            });
+        }
+        
+        function highlightSquare(square) {
+            clearSelection();
+            $(`#board [data-square="${square}"]`).addClass('selected-square');
+        }
+        
+        function clearSelection() {
+            selectedSquare = null;
+            possibleMoves = [];
+            $('.selected-square').removeClass('selected-square');
+            $('.possible-move').removeClass('possible-move');
+        }
     }
 });

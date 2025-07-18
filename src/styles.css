@@ -494,6 +494,30 @@ body::before {
     }
 }
 
+/* Mobile tap-to-move styles */
+.selected-square {
+    position: relative;
+    background-color: rgba(255, 255, 0, 0.5) !important;
+    box-shadow: inset 0 0 10px rgba(255, 255, 0, 0.8);
+}
+
+.possible-move {
+    position: relative;
+}
+
+.possible-move::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 25px;
+    height: 25px;
+    background: rgba(76, 175, 80, 0.6);
+    border-radius: 50%;
+    pointer-events: none;
+}
+
 /* Mobile reinforcement styles */
 @media (max-width: 768px) {
     /* Keep reinforcement in document flow on mobile */
@@ -546,27 +570,6 @@ body::before {
 @media (max-width: 768px) {
     body {
         padding: 10px;
-        /* Allow normal scrolling by default */
-        touch-action: auto;
-    }
-    
-    /* Only prevent scrolling on the chess board itself */
-    #board {
-        touch-action: none;
-    }
-    
-    /* Ensure scrolling works everywhere else */
-    .container {
-        touch-action: auto;
-    }
-    
-    .left-panel,
-    .right-panel,
-    .controls-section,
-    .settings,
-    .move-history,
-    .reinforcement-container {
-        touch-action: auto;
     }
     
     /* Smaller pieces for mobile */
@@ -603,8 +606,17 @@ body::before {
         max-width: none;
     }
     
+    /* Garrison container appears right after board when visible */
+    .reinforcement-container {
+        order: 2; /* Right after center panel */
+        margin: 10px auto;
+        max-width: min(90vw, 400px);
+        padding: 15px;
+        background: rgba(138, 43, 226, 0.25);
+    }
+    
     .material-strength {
-        order: 2;
+        order: 3;
         width: 100%;
         max-width: min(90vw, 400px);
         margin-top: 10px;
@@ -612,24 +624,19 @@ body::before {
     }
     
     .left-panel {
-        order: 3;
-        width: 100%;
-        flex-direction: column;
-    }
-    
-    .right-panel {
         order: 4;
         width: 100%;
         flex-direction: column;
     }
     
-    /* Ensure reinforcement container appears in right panel flow */
-    .reinforcement-container {
-        order: 1; /* First in right panel */
+    .right-panel {
+        order: 5;
+        width: 100%;
+        flex-direction: column;
     }
     
     .move-history {
-        order: 2; /* After reinforcement */
+        order: 1; /* In right panel */
     }
     
     .controls-section {
@@ -888,6 +895,13 @@ img[src=" "] {
     text-align: center;
     animation: fadeIn 0.5s ease-in-out;
     box-shadow: 0 4px 20px rgba(138, 43, 226, 0.3);
+}
+
+/* Desktop: Keep garrison in normal flow */
+@media (min-width: 769px) {
+    .reinforcement-container {
+        /* On desktop, it's already in the right place */
+    }
 }
 
 .reinforcement-header {
